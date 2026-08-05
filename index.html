@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jiaxing Li — Computational &amp; Cognitive Neuroscience</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0E17;
+    --bg-alt: #10161F;
+    --bg-card: #131A26;
+    --ink: #ECEFF6;
+    --ink-dim: #93A0B7;
+    --ink-faint: #5C6A82;
+    --line: #202A3B;
+    --cyan: #5FE8D0;
+    --amber: #F0A857;
+    --max-w: 780px;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: var(--cyan); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s ease, color .2s ease; }
+  a:hover, a:focus-visible{ border-bottom-color: currentColor; }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+  .display{ font-family: 'Fraunces', serif; }
+  .mono{ font-family: 'JetBrains Mono', monospace; }
+
+  .wrap{ max-width: var(--max-w); margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- top nav ---------- */
+  .topnav{
+    position: sticky; top:0; z-index: 20;
+    background: rgba(10,14,23,.86);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topnav .wrap{
+    max-width: 920px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top: 14px; padding-bottom: 14px;
+  }
+  .topnav .id{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; letter-spacing: .04em;
+    color: var(--ink-dim);
+  }
+  .topnav .id b{ color: var(--ink); font-weight: 500; }
+  .topnav nav{ display:flex; gap: 22px; }
+  .topnav nav a{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; letter-spacing: .05em;
+    color: var(--ink-dim); text-transform: lowercase;
+    border-bottom: none;
+  }
+  .topnav nav a:hover{ color: var(--cyan); }
+  @media (max-width: 640px){
+    .topnav nav{ gap: 14px; overflow-x:auto; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position: relative;
+    padding: 96px 0 70px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  #spikeCanvas{
+    position:absolute; inset:0; width:100%; height:100%;
+    opacity: .5;
+  }
+  .hero .wrap{ position: relative; z-index: 2; max-width: 920px; }
+  .eyebrow{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--cyan);
+    display:flex; align-items:center; gap: 10px;
+    margin-bottom: 22px;
+  }
+  .eyebrow::before{
+    content:""; width: 22px; height: 1px; background: var(--cyan); display:inline-block;
+  }
+  .hero h1{
+    font-size: clamp(42px, 7vw, 68px);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.02;
+    margin-bottom: 22px;
+  }
+  .hero .tagline{
+    max-width: 560px;
+    color: var(--ink-dim);
+    font-size: 17px;
+    margin-bottom: 30px;
+  }
+  .hero .status{
+    display:flex; flex-wrap: wrap; gap: 8px 28px;
+    font-size: 14.5px;
+    color: var(--ink-dim);
+    margin-bottom: 34px;
+  }
+  .hero .status strong{ color: var(--ink); font-weight: 500; }
+  .dot{
+    display:inline-block; width:6px; height:6px; border-radius:50%;
+    background: var(--amber); margin-right: 8px; vertical-align: middle;
+    box-shadow: 0 0 0 3px rgba(240,168,87,.15);
+  }
+  .contact-row{ display:flex; flex-wrap: wrap; gap: 22px; align-items:center; }
+  .contact-row a{
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    color: var(--ink);
+    padding-bottom: 2px; border-bottom: 1px solid var(--line);
+  }
+  .contact-row a:hover{ color: var(--cyan); border-bottom-color: var(--cyan); }
+
+  /* ---------- sections ---------- */
+  section{ padding: 64px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom: none; }
+  .sec-head{ display:flex; align-items: baseline; justify-content: space-between; margin-bottom: 34px; gap: 16px; }
+  .sec-head h2{
+    font-family: 'Fraunces', serif; font-weight: 500; font-size: 26px;
+  }
+  .sec-num{
+    font-family:'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-faint);
+  }
+  .lede{ color: var(--ink-dim); max-width: 620px; margin-bottom: 8px; }
+
+  /* ---------- timeline (education) ---------- */
+  .timeline{ position: relative; padding-left: 26px; }
+  .timeline::before{
+    content:""; position:absolute; left: 4px; top: 6px; bottom: 6px; width: 1px;
+    background: linear-gradient(var(--cyan), var(--line) 85%);
+    opacity:.5;
+  }
+  .t-item{ position: relative; padding-bottom: 30px; }
+  .t-item:last-child{ padding-bottom: 0; }
+  .t-item::before{
+    content:""; position:absolute; left: -26px; top: 6px; width: 9px; height:9px; border-radius:50%;
+    background: var(--bg); border: 1.5px solid var(--cyan);
+  }
+  .t-date{ font-family:'JetBrains Mono', monospace; font-size: 12px; color: var(--cyan); letter-spacing:.03em; margin-bottom: 4px; }
+  .t-org{ font-weight: 600; font-size: 15.5px; }
+  .t-role{ color: var(--ink-dim); font-size: 14.5px; margin-top: 2px; }
+
+  /* ---------- research cards ---------- */
+  .proj{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    transition: border-color .2s ease;
+  }
+  .proj:hover{ border-color: #2c3a52; }
+  .proj-head{ display:flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  .proj-title{ font-weight: 600; font-size: 15.5px; max-width: 480px; }
+  .proj-date{ font-family:'JetBrains Mono', monospace; font-size: 11.5px; color: var(--ink-faint); white-space: nowrap; }
+  .proj-meta{ font-size: 13px; color: var(--amber); margin-bottom: 10px; font-family:'JetBrains Mono', monospace; }
+  .proj ul{ padding-left: 18px; color: var(--ink-dim); font-size: 14px; }
+  .proj li{ margin-bottom: 4px; }
+  .proj li::marker{ color: var(--cyan); }
+
+  /* ---------- publications ---------- */
+  .pub{ display:flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .pub:last-child{ border-bottom: none; }
+  .pub-tag{
+    font-family:'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing:.04em;
+    padding: 3px 8px; border-radius: 2px; height: fit-content; white-space:nowrap; margin-top:2px;
+    border: 1px solid;
+  }
+  .pub-tag.published{ color: var(--cyan); border-color: rgba(95,232,208,.4); }
+  .pub-tag.review{ color: var(--amber); border-color: rgba(240,168,87,.4); }
+  .pub-tag.prep{ color: var(--ink-faint); border-color: var(--line); }
+  .pub-body p{ font-size: 14.5px; }
+  .pub-authors{ color: var(--ink-dim); margin-bottom: 3px; }
+  .pub-authors .me{ color: var(--ink); font-weight: 600; }
+  .pub-venue{ color: var(--ink-faint); font-size: 13.5px; margin-top: 3px; }
+  .pub-venue a{ font-family:'JetBrains Mono', monospace; font-size: 12px; }
+
+  /* ---------- awards ---------- */
+  .award{ display:flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px dashed var(--line); font-size: 14.5px; }
+  .award:last-child{ border-bottom: none; }
+  .award-date{ font-family:'JetBrains Mono', monospace; color: var(--ink-faint); font-size: 12.5px; white-space: nowrap; }
+
+  /* ---------- skills ---------- */
+  .skill-group{ margin-bottom: 20px; }
+  .skill-group:last-child{ margin-bottom: 0; }
+  .skill-label{ font-family:'JetBrains Mono', monospace; font-size: 11.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing:.08em; margin-bottom: 10px; }
+  .pills{ display:flex; flex-wrap: wrap; gap: 8px; }
+  .pill{
+    font-size: 13px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 20px;
+    color: var(--ink-dim);
+  }
+
+  /* ---------- footer ---------- */
+  footer{ padding: 46px 0 60px; }
+  footer .wrap{ display:flex; flex-wrap:wrap; justify-content: space-between; align-items:center; gap: 14px; }
+  footer .f-note{ color: var(--ink-faint); font-size: 13px; }
+  footer .f-links{ display:flex; gap: 20px; }
+  footer .f-links a{ font-family:'JetBrains Mono', monospace; font-size: 13px; color: var(--ink-dim); border-bottom:none; }
+  footer .f-links a:hover{ color: var(--cyan); }
+
+  @media (max-width: 600px){
+    .wrap{ padding: 0 20px; }
+    .hero{ padding: 76px 0 50px; }
+    section{ padding: 46px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+  }
+
+  .reveal{ opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="wrap">
+    <div class="id">jiaxing <b>li</b></div>
+    <nav>
+      <a href="#about">about</a>
+      <a href="#education">education</a>
+      <a href="#research">research</a>
+      <a href="#publications">publications</a>
+      <a href="#awards">awards</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <canvas id="spikeCanvas"></canvas>
+  <div class="wrap">
+    <div class="eyebrow">computational &amp; cognitive neuroscience</div>
+    <h1 class="display">Jiaxing Li</h1>
+    <p class="tagline">I work between single-neuron biophysics and brain-wide imaging — reducing NEURON models with machine learning, mapping neural activity across whole light-sheet brains, and studying how electromagnetic fields interact with the body in MRI environments.</p>
+    <div class="status">
+      <div><span class="dot"></span><strong>Postgraduate Associate</strong>, Sensor Lab, Yale University</div>
+      <div>Prev. Laboratory of Physiology of Behavior &amp; McDougal Lab, Yale</div>
+    </div>
+    <div class="contact-row">
+      <a href="mailto:jxlijasonlee@gmail.com">jxlijasonlee@gmail.com</a>
+      <a href="mailto:jxli123@sjtu.edu.cn">jxli123@sjtu.edu.cn</a>
+      <a href="#" onclick="return false;" style="color:var(--ink-faint); cursor:default;" title="Add your CV link here">CV (PDF)</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="about">
+    <div class="sec-head reveal">
+      <h2 class="display">About</h2>
+      <span class="sec-num">01</span>
+    </div>
+    <p class="lede reveal" style="max-width:100%;">
+      I'm a researcher working at the intersection of computational modeling and experimental neuroscience. My recent work spans machine-learning reductions of biophysical neuron models, deep-learning pipelines for brain-wide neuronal mapping from light-sheet fluorescence microscopy, and the physics of how medical devices behave inside MRI fields. I trained in biomedical engineering at Shanghai Jiao Tong University, spent time in Maurice Smith's lab at Harvard studying cognitive-assessment biomarkers, and I'm currently based at Yale, moving between the Laboratory of Physiology of Behavior, the McDougal Lab, and the Sensor Lab.
+    </p>
+  </section>
+
+  <section id="education">
+    <div class="sec-head reveal">
+      <h2 class="display">Education &amp; Positions</h2>
+      <span class="sec-num">02</span>
+    </div>
+    <div class="timeline reveal">
+      <div class="t-item">
+        <div class="t-date">03/2026 — 09/2027</div>
+        <div class="t-org">Yale University</div>
+        <div class="t-role">Postgraduate Associate, Sensor Lab</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">10/2025 — 03/2026</div>
+        <div class="t-org">Yale University</div>
+        <div class="t-role">Postgraduate Associate, Laboratory of Physiology of Behavior &amp; McDougal Lab</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">07/2024 — 11/2024</div>
+        <div class="t-org">Harvard University</div>
+        <div class="t-role">Visiting Student, Neuromotor Control Lab</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">09/2021 — 06/2025</div>
+        <div class="t-org">Shanghai Jiao Tong University</div>
+        <div class="t-role">B.S. in Biomedical Engineering · GPA 3.57 / 4.0</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="research">
+    <div class="sec-head reveal">
+      <h2 class="display">Research</h2>
+      <span class="sec-num">03</span>
+    </div>
+    <p class="lede reveal">Selected projects across computational modeling, neuroimaging, and biomedical device physics.</p>
+
+    <div class="reveal">
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">Machine-learning reduction of biophysical models for multiscale neural stimulation</div>
+          <div class="proj-date">10/2025 – 03/2026</div>
+        </div>
+        <div class="proj-meta">McDougal Lab, Yale · Supervisor: Prof. Robert McDougal</div>
+        <ul>
+          <li>Developed a machine-learning mechanism encoding neural dynamics to predict spiking behavior</li>
+          <li>Simulated neural dynamics and contributed to NEURON simulator and ModelDB development</li>
+        </ul>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">Brain-wide 3D mapping of neuronal activity from light-sheet microscopy</div>
+          <div class="proj-date">10/2025 – 03/2026</div>
+        </div>
+        <div class="proj-meta">Laboratory of Physiology of Behavior, Yale</div>
+        <ul>
+          <li>Implemented a deep-learning pipeline for brain-wide 3D mapping of neuronal activity in LSFM datasets</li>
+        </ul>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">Longitudinal stability of MMSE / MoCA cognitive assessments</div>
+          <div class="proj-date">07/2024 – 11/2024</div>
+        </div>
+        <div class="proj-meta">Harvard Neuromotor Control Lab · Supervisor: Prof. Maurice Smith</div>
+        <ul>
+          <li>Showed MMSE/MoCA diagnostic accuracy stays stable under repeated annual administration using the ADNI dataset</li>
+          <li>Ran a non-inferiority analysis showing AUC decline exceeded the nominal 1%-per-year threshold</li>
+          <li>Quantified item-level AUC decline to identify an optimal item subset</li>
+        </ul>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">Dual-brain synchronization mechanisms of joint attention</div>
+          <div class="proj-date">Shanghai Jiao Tong University</div>
+        </div>
+        <div class="proj-meta">Supervisor: Prof. Shanbao Tong</div>
+        <ul>
+          <li>Used EEG hyperscanning with controlled variables to simulate real-life parent–child interaction</li>
+          <li>Built within-frequency dual-brain networks using phase-locking values and designed network thresholds</li>
+          <li>Identified the prefrontal cortex's key role in joint attention via enhanced network connectivity</li>
+        </ul>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">Unsupervised, cross-modal segmentation of dynamic lung MRI</div>
+          <div class="proj-date">Shanghai Jiao Tong University</div>
+        </div>
+        <div class="proj-meta">Supervisor: Prof. Puming Zhang</div>
+        <ul>
+          <li>Used 4D dynamic MRI to capture the full respiratory cycle</li>
+          <li>Aligned cross-modal representations through unsupervised domain adaptation</li>
+          <li>Improved Hausdorff distance, sensitivity, and specificity by 5–15% over baseline</li>
+        </ul>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">Unsupervised segmentation of brain stroke lesions</div>
+          <div class="proj-date">Shanghai Institute of Medical Device Testing</div>
+        </div>
+        <div class="proj-meta">Supervisor: Dr. Xun Liu</div>
+        <ul>
+          <li>Leveraged f-AnoGAN and GMVAE models to segment stroke lesions from MRI</li>
+          <li>Improved SSIM by 20% over baseline</li>
+        </ul>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">Temperature-rise mechanisms of medical devices in gradient magnetic fields</div>
+          <div class="proj-date">Shanghai Institute of Medical Device Testing</div>
+        </div>
+        <div class="proj-meta">Supervisor: Prof. Puming Zhang</div>
+        <ul>
+          <li>Examined how initial temperature, gel thickness, and waveform shape drive heating in the MR environment</li>
+          <li>Showed sine-wave fields heat more than triangular waves at the same switching rate</li>
+          <li>Derived and experimentally validated a lumped-parameter thermal model</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="publications">
+    <div class="sec-head reveal">
+      <h2 class="display">Publications</h2>
+      <span class="sec-num">04</span>
+    </div>
+
+    <div class="reveal">
+      <div class="pub">
+        <span class="pub-tag review">under review</span>
+        <div class="pub-body">
+          <p class="pub-authors">Y. Li†, <span class="me">J. Li†</span>, C. Mo†, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang, X. Liu</p>
+          <p>A quasi-static methodology for a fast and precise measurement of medical implant magnetic torque induced by static magnetic field in MRI</p>
+          <p class="pub-venue">IEEE Transactions on Instrumentation and Measurement · † equal contribution</p>
+        </div>
+      </div>
+
+      <div class="pub">
+        <span class="pub-tag published">published</span>
+        <div class="pub-body">
+          <p class="pub-authors">Y. Li†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang, X. Liu</p>
+          <p>Temperature rise mechanism of pacemaker induced by a time-varying gradient magnetic field</p>
+          <p class="pub-venue">IEEE Transactions on Instrumentation and Measurement · <a href="https://doi.org/10.1109/TIM.2024.3485457" target="_blank" rel="noopener">DOI: 10.1109/TIM.2024.3485457</a> · † equal contribution</p>
+        </div>
+      </div>
+
+      <div class="pub">
+        <span class="pub-tag published">published</span>
+        <div class="pub-body">
+          <p class="pub-authors">X. Liu†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang</p>
+          <p>Lumped parameter model of human whole-body circulatory loop</p>
+          <p class="pub-venue">IEEE Access · <a href="https://doi.org/10.1109/ACCESS.2024.3491112" target="_blank" rel="noopener">DOI: 10.1109/ACCESS.2024.3491112</a> · † equal contribution</p>
+        </div>
+      </div>
+
+      <div class="pub">
+        <span class="pub-tag prep">ready to submit</span>
+        <div class="pub-body">
+          <p class="pub-authors"><span class="me">J. Li</span>, M.A. Smith</p>
+          <p>The diagnostic accuracy of the MMSE and MoCA is preserved across 8 years of repeated administration</p>
+          <p class="pub-venue">In preparation</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="awards">
+    <div class="sec-head reveal">
+      <h2 class="display">Honors &amp; Awards</h2>
+      <span class="sec-num">05</span>
+    </div>
+    <div class="reveal">
+      <div class="award"><span>Undergraduate Overseas Training Scholarship, SJTU (Top 1%)</span><span class="award-date">11 / 2024</span></div>
+      <div class="award"><span>Undergraduate Merit Scholarship, SJTU (2023 Annual)</span><span class="award-date">09 / 2024</span></div>
+      <div class="award"><span>2nd Place, Guangdong Province Biomedical Engineering Design Competition</span><span class="award-date">06 / 2024</span></div>
+      <div class="award"><span>Undergraduate Merit Scholarship, SJTU (2022 Annual)</span><span class="award-date">09 / 2023</span></div>
+      <div class="award"><span>Undergraduate Merit Scholarship, SJTU (2021 Annual)</span><span class="award-date">09 / 2022</span></div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="sec-head reveal">
+      <h2 class="display">Skills &amp; Interests</h2>
+      <span class="sec-num">06</span>
+    </div>
+    <div class="reveal">
+      <div class="skill-group">
+        <div class="skill-label">Technique</div>
+        <div class="pills">
+          <span class="pill">MATLAB</span><span class="pill">Python</span><span class="pill">C++</span>
+          <span class="pill">R</span><span class="pill">LaTeX</span><span class="pill">EEG electrophysiology</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-label">Research interests</div>
+        <div class="pills">
+          <span class="pill">Computational Neuroscience</span><span class="pill">Cognitive Neuroscience</span>
+          <span class="pill">Neural Disease</span><span class="pill">Neural Imaging</span><span class="pill">Machine Learning</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-label">Languages</div>
+        <div class="pills">
+          <span class="pill">English — proficient</span><span class="pill">Chinese — native</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="f-note">New Haven, CT · updated August 2026</div>
+    <div class="f-links">
+      <a href="mailto:jxlijasonlee@gmail.com">email</a>
+      <a href="#" onclick="return false;" style="color:var(--ink-faint); cursor:default;">google scholar</a>
+      <a href="#" onclick="return false;" style="color:var(--ink-faint); cursor:default;">github</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- hero spike-raster canvas ----
+  (function(){
+    const canvas = document.getElementById('spikeCanvas');
+    const ctx = canvas.getContext('2d');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let w, h, dpr;
+    const channels = 6;
+    let spikes = [];
+
+    function resize(){
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    function seedSpikes(){
+      spikes = [];
+      for(let c=0;c<channels;c++){
+        let arr = [];
+        let x = -Math.random()*200;
+        while(x < w + 200){
+          x += 22 + Math.random()*46;
+          arr.push(x);
+        }
+        spikes.push(arr);
+      }
+    }
+
+    function draw(t){
+      ctx.clearRect(0,0,w,h);
+      const rowH = h / (channels+1);
+      for(let c=0;c<channels;c++){
+        const y = rowH * (c+1);
+        const color = c % 2 === 0 ? '95,232,208' : '240,168,87';
+        ctx.strokeStyle = `rgba(${color},${0.16 + (c%3)*0.03})`;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        let started = false;
+        for(let x = -40; x < w+40; x+=2){
+          let yy = y;
+          for(const sx of spikes[c]){
+            const d = x - sx;
+            if(Math.abs(d) < 6){
+              const amp = 14 + (c%3)*6;
+              yy = y - Math.exp(-(d*d)/6) * amp;
+            }
+          }
+          if(!started){ ctx.moveTo(x,yy); started = true; }
+          else ctx.lineTo(x,yy);
+        }
+        ctx.stroke();
+      }
+    }
+
+    function animate(t){
+      if(!reduceMotion){
+        for(let c=0;c<channels;c++){
+          spikes[c] = spikes[c].map(x => {
+            let nx = x - 0.35 - (c%3)*0.12;
+            if(nx < -200){ nx = w + 200 + Math.random()*100; }
+            return nx;
+          });
+        }
+      }
+      draw(t);
+      if(!reduceMotion) requestAnimationFrame(animate);
+    }
+
+    function init(){
+      resize(); seedSpikes(); draw(0);
+      if(!reduceMotion) requestAnimationFrame(animate);
+    }
+    window.addEventListener('resize', () => { resize(); seedSpikes(); draw(0); });
+    init();
+  })();
+
+  // ---- scroll reveal ----
+  (function(){
+    const items = document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){
+      items.forEach(el => el.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    items.forEach(el => io.observe(el));
+  })();
+</script>
+
+</body>
+</html>
