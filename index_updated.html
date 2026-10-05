@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="Jiaxing Li — computational neuroscience, neural dynamics, NeuroAI, and machine learning for biophysical neuron models." name="description"/>
+<title>Jiaxing Li | Computational Neuroscience</title>
+<style>
+    :root {
+      --bg: #ffffff;
+      --panel: #f7f9fc;
+      --text: #1f2937;
+      --muted: #667085;
+      --line: #e6eaf0;
+      --blue: #00356b;
+      --blue-2: #2563a6;
+      --link: #165d9c;
+      --soft-blue: #eef5fb;
+      --accent: #b65c1a;
+      --max: 1140px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 48px 34px 72px;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 54px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 34px;
+      align-self: start;
+      font-size: 14px;
+    }
+
+    .avatar {
+      width: 144px;
+      height: 144px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #e9f1f9, #f6f8fb);
+      border: 1px solid #dbe4ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 44px;
+      letter-spacing: -1px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 22px rgba(0, 53, 107, 0.06);
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .name {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: #111827;
+      font-size: 27px;
+      line-height: 1.2;
+    }
+    .role { margin: 8px 0 2px; color: var(--text); font-weight: 600; }
+    .affiliation { color: var(--muted); margin-bottom: 15px; }
+
+    .contact-list,
+    .sidebar-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .contact-list li { margin: 7px 0; overflow-wrap: anywhere; }
+
+    .cv-btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 13px;
+      border-radius: 6px;
+      color: white;
+      background: var(--blue);
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none !important;
+    }
+    .cv-btn:hover { background: #00284f; }
+
+    .sidebar-block {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+    .sidebar-label {
+      margin: 0 0 9px;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .sidebar-nav li { margin: 6px 0; }
+    .sidebar-nav a { color: var(--muted); }
+    .sidebar-nav a:hover { color: var(--blue); text-decoration: none; }
+
+    main { min-width: 0; }
+    .intro {
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 34px;
+    }
+    .intro h1 {
+      margin: 0 0 16px;
+      color: var(--blue);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 34px;
+      font-weight: 600;
+    }
+    .intro p { margin: 0 0 11px; }
+    .interest-line { color: #475467; }
+    .interest-line strong { color: var(--text); }
+
+    section { margin: 0 0 42px; scroll-margin-top: 24px; }
+    section h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 600;
+      color: var(--blue);
+      font-size: 25px;
+      margin: 0 0 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .entry {
+      display: grid;
+      grid-template-columns: 122px minmax(0, 1fr);
+      gap: 18px;
+      margin: 0 0 22px;
+    }
+    .date {
+      color: var(--muted);
+      font-size: 13px;
+      padding-top: 2px;
+      white-space: nowrap;
+    }
+    .entry h3 {
+      margin: 0 0 3px;
+      font-size: 16.5px;
+      line-height: 1.35;
+      color: #101828;
+    }
+    .meta { color: var(--muted); font-size: 14px; margin-bottom: 6px; }
+    .entry ul { margin: 7px 0 0 19px; padding: 0; }
+    .entry li { margin: 3px 0; }
+
+    .research-card {
+      margin: 0 0 20px;
+      padding: 19px 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .research-card:hover { border-color: #c8d7e6; box-shadow: 0 6px 20px rgba(16, 24, 40, 0.04); }
+    .research-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .research-top h3 { margin: 0; font-size: 16.5px; line-height: 1.35; }
+    .research-date { color: var(--muted); font-size: 12.5px; white-space: nowrap; }
+    .project-title { color: var(--blue-2); font-weight: 600; margin: 8px 0 4px; }
+    .research-card ul { margin: 7px 0 0 18px; padding: 0; }
+    .research-card li { margin: 4px 0; }
+
+    .pub {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 14px;
+      padding: 13px 0 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .pub:last-child { border-bottom: none; }
+    .pub-status {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--blue);
+      background: var(--soft-blue);
+      border-radius: 4px;
+      padding: 5px 7px;
+      height: fit-content;
+      text-align: center;
+    }
+    .pub-title { font-weight: 650; color: #101828; margin-bottom: 4px; }
+    .authors { color: #475467; font-size: 14px; }
+    .venue { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+    .me { font-weight: 700; color: #111827; }
+
+    .conference {
+      padding: 14px 17px;
+      margin: 0 0 12px;
+      border-left: 3px solid var(--blue-2);
+      background: var(--panel);
+    }
+    .conference strong { color: #101828; }
+    .conference .small { color: var(--muted); font-size: 13.5px; }
+
+    .award-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 90px;
+      gap: 16px;
+      padding: 9px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+    .award-row:last-child { border-bottom: none; }
+    .award-row span:last-child { text-align: right; color: var(--muted); font-size: 13px; }
+
+    .skills-grid { display: grid; gap: 13px; }
+    .skill-row { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 16px; }
+    .skill-row strong { color: #344054; }
+    .skill-row span { color: #475467; }
+
+    .note-box {
+      margin-top: 18px;
+      padding: 12px 15px;
+      background: #fbfcfe;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+
+    .conference-figure {
+      margin: 14px 0 2px;
+    }
+    .conference-figure img {
+      width: 100%;
+      max-height: 360px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      display: block;
+    }
+    .conference-figure figcaption {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+
+    .pub-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 170px;
+      gap: 18px;
+      align-items: center;
+    }
+    .pub-figure {
+      margin: 0;
+      width: 170px;
+    }
+    .pub-figure img {
+      width: 170px;
+      height: 112px;
+      object-fit: contain;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 5px;
+      display: block;
+    }
+    .pub-figure figcaption {
+      margin-top: 5px;
+      color: #98a2b3;
+      font-size: 11px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: 52px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      color: #98a2b3;
+      font-size: 12.5px;
+    }
+
+    @media (max-width: 820px) {
+      .page { grid-template-columns: 1fr; gap: 28px; padding: 28px 22px 56px; }
+      .sidebar { position: static; }
+      .profile-top { display: grid; grid-template-columns: 108px 1fr; gap: 18px; align-items: center; }
+      .avatar { width: 108px; height: 108px; margin: 0; font-size: 34px; }
+      .sidebar-block.nav-block { display: none; }
+      .entry { grid-template-columns: 1fr; gap: 4px; }
+      .date { white-space: normal; }
+      .skill-row { grid-template-columns: 1fr; gap: 2px; }
+    }
+
+    @media (max-width: 560px) {
+      .profile-top { grid-template-columns: 82px 1fr; }
+      .avatar { width: 82px; height: 82px; font-size: 28px; }
+      .name { font-size: 24px; }
+      .intro h1 { font-size: 29px; }
+      .research-top { display: block; }
+      .research-date { display: block; margin-top: 4px; }
+      .pub { grid-template-columns: 1fr; gap: 7px; }
+      .pub-main { grid-template-columns: 1fr; }
+      .pub-figure { width: 100%; max-width: 320px; }
+      .pub-figure img { width: 100%; height: auto; max-height: 220px; }
+      .pub-status { width: fit-content; }
+      .award-row { grid-template-columns: 1fr; gap: 2px; }
+      .award-row span:last-child { text-align: left; }
+    }
+  
+
+    /* ---------- institution logos ---------- */
+    .institution-head {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+    .institution-logo {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 7px;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 4px;
+    }
+    .research-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .research-logo {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      flex: 0 0 auto;
+      border-radius: 6px;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 4px;
+    }
+    .research-heading h3 { min-width: 0; }
+</style>
+</head>
+<body><!-- Expected images: JiaxingLi.jpg, CNS_Jiaxing.jpg, Event-based_neural_dynamic.jpg, MMSE_MoCA_fig1.png, Pacemaker_heating_Fig1.jpg, Circulatory_loop_Fig2.jpg, Yale_logo.png, Harvard_logo.png, SJTU_logo.png, SIMDT_logo.png -->
+<div class="page">
+<aside class="sidebar">
+<div class="profile-top">
+<img alt="Portrait of Jiaxing Li" class="avatar" src="images/JiaxingLi.jpg"/>
+<div>
+<h1 class="name">Jiaxing Li</h1>
+<div class="role">Postgraduate Associate</div>
+<div class="affiliation">Yale University · New Haven, CT</div>
+</div>
+</div>
+<ul class="contact-list">
+<li><a href="mailto:jiaxing.li@yale.edu">jiaxing.li@yale.edu</a></li>
+<li><a href="mailto:jxlijasonlee@gmail.com">jxlijasonlee@gmail.com</a></li>
+</ul>
+<a class="cv-btn" href="CV_jiaxingLi.pdf" rel="noopener" target="_blank">Curriculum Vitae</a>
+<div class="sidebar-block">
+<p class="sidebar-label">Research interests</p>
+<div>Computational Neuroscience<br/>Neural Dynamics<br/>NeuroAI<br/>Machine Learning<br/>Cognitive Neuroscience</div>
+</div>
+<div class="sidebar-block nav-block">
+<p class="sidebar-label">Navigate</p>
+<ul class="sidebar-nav">
+<li><a href="#education">Education &amp; Positions</a></li>
+<li><a href="#research">Research</a></li>
+<li><a href="#conferences">Conferences</a></li>
+<li><a href="#publications">Publications</a></li>
+<li><a href="#awards">Honors &amp; Awards</a></li>
+<li><a href="#skills">Skills</a></li>
+</ul>
+</div>
+</aside>
+<main>
+<div class="intro">
+<h1>About Me</h1>
+<p>
+          I am a postgraduate researcher at <strong>Yale University</strong> working at the intersection of computational neuroscience, neural dynamics, and machine learning. My current work focuses on event-driven machine-learning reductions of biophysically detailed neuron models in the <strong>NEURON</strong> simulator, with the goal of making multiscale neural simulation faster while preserving biologically meaningful dynamics.
+        </p>
+<p>
+          Previously, I worked on brain-wide neuronal activity mapping at Yale's Laboratory of Physiology of Behavior and studied longitudinal cognitive-assessment biomarkers in Prof. Maurice Smith's Neuromotor Control Lab at <strong>Harvard University</strong>. My undergraduate training in biomedical engineering at Shanghai Jiao Tong University also included EEG hyperscanning, medical imaging, MRI safety, and physiological modeling.
+        </p>
+<p class="interest-line"><strong>Current interests:</strong> computational neuroscience, neural dynamics, NeuroAI, machine learning for biological systems, cognitive neuroscience, and neurological disease.</p>
+</div>
+<section id="education">
+<h2>🏫 Education &amp; Positions</h2>
+<div class="entry">
+<div class="date">03/2026 — 09/2027</div>
+<div><div class="institution-head"><img alt="Yale University logo" class="institution-logo" onerror="this.style.display='none'" src="images/Yale_logo.png"/><div>
+<h3>Yale University</h3>
+<div class="meta">Postgraduate Associate, McDougal Lab · New Haven, CT, US</div>
+</div></div></div>
+</div>
+<div class="entry">
+<div class="date">10/2025 — 03/2026</div>
+<div><div class="institution-head"><img alt="Yale University logo" class="institution-logo" onerror="this.style.display='none'" src="images/Yale_logo.png"/><div>
+<h3>Yale University</h3>
+<div class="meta">Postgraduate Associate, Laboratory of Physiology of Behavior · New Haven, CT, US</div>
+</div></div></div>
+</div>
+<div class="entry">
+<div class="date">07/2024 — 11/2024</div>
+<div><div class="institution-head"><img alt="Harvard University logo" class="institution-logo" onerror="this.style.display='none'" src="images/Harvard_logo.png"/><div>
+<h3>Harvard University</h3>
+<div class="meta">Visiting Student, Neuromotor Control Lab · Cambridge, MA, US</div>
+</div></div></div>
+</div>
+<div class="entry">
+<div class="date">09/2021 — 06/2025</div>
+<div><div class="institution-head"><img alt="Shanghai Jiao Tong University logo" class="institution-logo" onerror="this.style.display='none'" src="images/SJTU_logo.png"/><div>
+<h3>Shanghai Jiao Tong University</h3>
+<div class="meta">B.S. in Biomedical Engineering · Shanghai, China</div>
+</div></div></div>
+</div>
+</section>
+<section id="research">
+<h2>📖 Research Experiences</h2>
+<article class="research-card">
+<div class="research-top"><div class="research-heading"><img alt="Yale University logo" class="research-logo" onerror="this.style.display='none'" src="images/Yale_logo.png"/><h3>McDougal Lab, Yale University</h3></div>
+
+<span class="research-date">10/2025 — 03/2026</span>
+</div>
+<div class="meta">Postgraduate Associate to Prof. Robert McDougal · New Haven, CT</div>
+<div class="project-title">Machine learning reduction of biophysical models for multiscale stimulation analysis</div>
+<ul>
+<li>Developed an event-driven ML surrogate for biophysical neuron models in NEURON to predict next-spike timing.</li>
+<li>Built recurrent encoders that map recent excitatory and inhibitory events into compact latent representations of neuronal dynamics.</li>
+<li>Achieved F1/AUC of 0.98 and 0.07-ms next-spike-time MAE while preserving long-horizon spiking dynamics.</li>
+<li>Integrated the surrogate with NEURON for scalable simulation across heterogeneous neuron models.</li>
+</ul>
+</article>
+<article class="research-card">
+<div class="research-top"><div class="research-heading"><img alt="Yale University logo" class="research-logo" onerror="this.style.display='none'" src="images/Yale_logo.png"/><h3>Dietrich Laboratory of Physiology of Behavior, Yale University</h3></div>
+
+<span class="research-date">10/2025 — 03/2026</span>
+</div>
+<div class="meta">Postgraduate Associate to Prof. Marcelo Dietrich · New Haven, CT</div>
+<div class="project-title">A deep learning pipeline for 3D brain-wide mapping of local neuronal ensembles in LSFM datasets</div>
+<ul>
+<li>Developed a deep-learning pipeline for 3D brain-wide neuronal activity mapping from light-sheet fluorescence microscopy data.</li>
+<li>Analyzed developmental neural activity patterns to study circuit mechanisms of social behavior.</li>
+</ul>
+</article>
+<article class="research-card">
+<div class="research-top"><div class="research-heading"><img alt="Harvard University logo" class="research-logo" onerror="this.style.display='none'" src="images/Harvard_logo.png"/><h3>Neuromotor Control Lab, Harvard University</h3></div>
+
+<span class="research-date">07/2024 — 11/2024</span>
+</div>
+<div class="meta">Visiting Student to Prof. Maurice Smith · Cambridge, MA</div>
+<div class="project-title">Performance of MMSE and MoCA under repeated administrations</div>
+<ul>
+<li>Analyzed longitudinal NACC data to assess MMSE/MoCA diagnostic accuracy across 8 annual administrations.</li>
+<li>Evaluated CN–MCI and CN–dementia classification using ROC-AUC, Youden index, sensitivity/specificity, and bootstrapping analysis.</li>
+<li>Demonstrated stable diagnostic performance over 8 years, with AUC decline significantly below 1% per year.</li>
+</ul>
+</article>
+<article class="research-card">
+<div class="research-top"><div class="research-heading"><img alt="Shanghai Jiao Tong University logo" class="research-logo" onerror="this.style.display='none'" src="images/SJTU_logo.png"/><h3>Neuroengineering Laboratory, Shanghai Jiao Tong University</h3></div>
+
+<span class="research-date">05/2024 — 06/2025</span>
+</div>
+<div class="meta">Research Assistant to Prof. Shanbao Tong · Shanghai, China</div>
+<div class="project-title">Dual-brain synchronization mechanism of joint attention in natural behavior</div>
+<ul>
+<li>Utilized EEG hyperscanning with controlled variables to simulate real-life parent–child interaction.</li>
+<li>Designed network thresholds and used phase-locking values to construct within-frequency dual-brain networks.</li>
+<li>Demonstrated the prefrontal cortex's key role in joint-attention engagement with enhanced network connectivity.</li>
+</ul>
+</article>
+<article class="research-card">
+<div class="research-top"><div class="research-heading"><img alt="Shanghai Jiao Tong University logo" class="research-logo" onerror="this.style.display='none'" src="images/SJTU_logo.png"/><h3>Neural Information Processing Laboratory, Shanghai Jiao Tong University</h3></div>
+
+<span class="research-date">05/2023 — 05/2024</span>
+</div>
+<div class="meta">Research Assistant to Prof. Puming Zhang · Shanghai, China</div>
+<div class="project-title">Temperature rise mechanism of medical devices induced by gradient magnetic fields</div>
+<ul>
+<li>Developed an eddy-current and lumped thermal model to characterize MRI gradient-field-induced heating in active implantable medical devices.</li>
+<li>Evaluated the effects of gel thickness, initial temperature, and magnetic-field waveform on implant temperature rise.</li>
+<li>Identified stronger heating under sinusoidal than triangular gradient waveforms and localized peak heating near the device battery.</li>
+</ul>
+<div class="project-title">Lumped Parameter Model of Human Whole-Body Circulatory Loop</div>
+<ul>
+<li>Developed a closed-loop lumped-parameter model of systemic and pulmonary circulation using electrical analogs of cardiovascular dynamics.</li>
+<li>Implemented and solved ODEs in Simulink to reproduce physiological pressure and flow dynamics.</li>
+<li>Simulated normal, heart-failure, and cardiogenic-shock states and modeled aortic stenosis and mitral regurgitation.</li>
+</ul>
+</article>
+<article class="research-card">
+<div class="research-top"><div class="research-heading"><img alt="Shanghai Institute of Medical Device Testing logo" class="research-logo" onerror="this.style.display='none'" src="images/SIMDT_logo.png"/><h3>Shanghai Institute of Medical Device Testing</h3></div>
+
+<span class="research-date">05/2023 — 05/2024</span>
+</div>
+<div class="meta">Research Assistant to Dr. Xun Liu · Shanghai, China</div>
+<div class="project-title">Unsupervised Segmentation Algorithms for Human Brain Stroke Lesions</div>
+<ul>
+<li>Leveraged f-AnoGAN and GMVAE models to segment stroke lesions from MRI images.</li>
+<li>Optimized model parameters to achieve an SSIM of 0.816 for normal-tissue reconstruction.</li>
+<li>Improved segmentation performance over baseline with a 20% enhancement in SSIM.</li>
+</ul>
+</article>
+</section>
+<section id="conferences">
+<h2>🎤 Conferences</h2>
+<div class="conference">
+<strong>35th Annual Computational Neuroscience Meeting (CNS 2026)</strong><br/>
+          Poster Presentation · Halifax, Nova Scotia, Canada · July 2026<br/>
+<span class="small">“Event-based machine-learned reduction of biophysically detailed neuron models”</span>
+<figure class="conference-figure">
+<img alt="Jiaxing Li presenting at CNS 2026" src="images/CNS_Jiaxing.jpg"/>
+<figcaption>Poster presentation at CNS 2026 in Halifax, Nova Scotia.</figcaption>
+</figure>
+</div>
+<div class="conference">
+<strong>Society for Neuroscience (SfN 2026)</strong><br/>
+          Poster Presentation · Washington, DC · November 2026<br/>
+<span class="small">“Machine learning reduction of biophysical models for multi-scale stimulation analysis”</span>
+</div>
+</section>
+<section id="publications">
+<h2>📝 Publications &amp; Manuscripts</h2>
+<div class="pub">
+<div class="pub-status">In prep.</div>
+<div class="pub-main"><div>
+<div class="pub-title">Event-based machine-learned reduction of a biophysically detailed neuron model</div>
+<div class="authors"><span class="me">J. Li</span>, R.A. McDougal</div>
+<div class="venue">Manuscript in preparation</div>
+</div><figure class="pub-figure"><img alt="Event-based neural dynamics and machine-learning surrogate model" onerror="this.closest('.pub-figure').style.display='none'" src="images/Event-based_neural_dynamic.jpg"/><figcaption>Event-driven neural dynamics · current McDougal Lab project</figcaption></figure></div>
+</div>
+<div class="pub">
+<div class="pub-status">In prep.</div>
+<div class="pub-main"><div>
+<div class="pub-title">The diagnostic accuracy of the MMSE and MoCA is preserved across 8 years of repeated administration</div>
+<div class="authors"><span class="me">J. Li</span>, M.A. Smith</div>
+<div class="venue">Manuscript in preparation</div>
+</div><figure class="pub-figure"><img alt="Longitudinal MMSE and MoCA diagnostic accuracy analysis" onerror="this.closest('.pub-figure').style.display='none'" src="images/MMSE_MoCA_fig1.png"/><figcaption>Longitudinal MMSE / MoCA diagnostic-performance analysis</figcaption></figure></div>
+</div>
+<div class="pub">
+<div class="pub-status">Published</div>
+<div class="pub-main">
+<div>
+<div class="pub-title">Temperature Rise Mechanism of Pacemaker Induced by a Time-varying Gradient Magnetic Field</div>
+<div class="authors">Y. Li†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang, X. Liu</div>
+<div class="venue">IEEE Transactions on Instrumentation and Measurement · <a href="https://doi.org/10.1109/TIM.2024.3485457" rel="noopener" target="_blank">DOI: 10.1109/TIM.2024.3485457</a> · † equal contribution</div>
+</div>
+<figure class="pub-figure">
+<img alt="Pacemaker gradient-field heating mechanism" onerror="this.closest('.pub-figure').style.display='none'" src="images/Pacemaker_heating_Fig1.jpg"/>
+<figcaption>Fig. 1 · Pacemaker heating under a gradient magnetic field</figcaption>
+</figure>
+</div>
+</div>
+<div class="pub">
+<div class="pub-status">Review</div>
+<div>
+<div class="pub-title">A Quasi-static Methodology for a Fast and Precise Measurement of Medical Implant Magnetic Torque Induced by Static Magnetic Field in MRI</div>
+<div class="authors">Y. Li†, <span class="me">J. Li†</span>, C. Mo†, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang, X. Liu</div>
+<div class="venue">IEEE Transactions on Instrumentation and Measurement · under review</div>
+</div>
+</div>
+<div class="pub">
+<div class="pub-status">Published</div>
+<div class="pub-main">
+<div>
+<div class="pub-title">Lumped Parameter Model of Human Whole Body Circulatory Loop</div>
+<div class="authors">X. Liu†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang</div>
+<div class="venue">IEEE Access · <a href="https://doi.org/10.1109/ACCESS.2024.3491112" rel="noopener" target="_blank">DOI: 10.1109/ACCESS.2024.3491112</a> · † equal contribution</div>
+</div>
+<figure class="pub-figure">
+<img alt="Lumped parameter model of the human whole-body circulatory loop" onerror="this.closest('.pub-figure').style.display='none'" src="images/Circulatory_loop_Fig2.jpg"/>
+<figcaption>Fig. 2 · Whole-body circulatory-loop lumped parameter model</figcaption>
+</figure>
+</div>
+</div>
+<div class="note-box">
+<strong>Acknowledged research contribution:</strong> <em>The Prevalence of Misreporting and Misinterpreting Correlation Coefficients in Biomedical Literature</em> — contributed to data collection, investigation, visualization, and manuscript drafting for a systematic review of statistical reporting in biomedical literature.
+        </div>
+</section>
+<section id="awards">
+<h2>🎖 Honors &amp; Awards</h2>
+<div class="award-row"><span>Undergraduate Overseas Training Scholarship, Shanghai Jiao Tong University (Top 1%)</span><span>2024.11</span></div>
+<div class="award-row"><span>Undergraduate Merit Scholarship, Shanghai Jiao Tong University (2023 Annual)</span><span>2024.09</span></div>
+<div class="award-row"><span>Second Place, Guangdong Province Biomedical Engineering Design Competition</span><span>2024.06</span></div>
+<div class="award-row"><span>Undergraduate Merit Scholarship, Shanghai Jiao Tong University (2022 Annual)</span><span>2023.09</span></div>
+<div class="award-row"><span>Undergraduate Merit Scholarship, Shanghai Jiao Tong University (2021 Annual)</span><span>2022.09</span></div>
+</section>
+<section id="skills">
+<h2>🧰 Skills &amp; Interests</h2>
+<div class="skills-grid">
+<div class="skill-row"><strong>Software</strong><span>MATLAB, Simulink, R, LabVIEW, Multisim</span></div>
+<div class="skill-row"><strong>Programming</strong><span>Python, C++, C, Linux</span></div>
+<div class="skill-row"><strong>Experimental / Imaging</strong><span>Perfusion, immunohistochemistry, stereotaxic surgery, confocal microscopy, genotyping, light-sheet fluorescence microscopy, two-photon fluorescence microscopy</span></div>
+<div class="skill-row"><strong>Languages</strong><span>English (IELTS 7.5), Chinese (native)</span></div>
+<div class="skill-row"><strong>Interests</strong><span>NeuroAI, Computational Neuroscience, Neural Dynamics, Machine Learning, Neurological Disease, Cognitive Neuroscience</span></div>
+</div>
+</section>
+<footer>
+        Jiaxing Li · New Haven, Connecticut · Updated October 2026
+      </footer>
+</main>
+</div>
+</body>
+</html>
