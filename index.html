@@ -64,6 +64,8 @@
       letter-spacing: -1px;
       margin-bottom: 22px;
       box-shadow: 0 8px 22px rgba(0, 53, 107, 0.06);
+      object-fit: cover;
+      object-position: center;
     }
 
     .name {
@@ -244,6 +246,53 @@
       font-size: 13px;
     }
 
+
+    .conference-figure {
+      margin: 14px 0 2px;
+    }
+    .conference-figure img {
+      width: 100%;
+      max-height: 360px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      display: block;
+    }
+    .conference-figure figcaption {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+
+    .pub-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 170px;
+      gap: 18px;
+      align-items: center;
+    }
+    .pub-figure {
+      margin: 0;
+      width: 170px;
+    }
+    .pub-figure img {
+      width: 170px;
+      height: 112px;
+      object-fit: contain;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 5px;
+      display: block;
+    }
+    .pub-figure figcaption {
+      margin-top: 5px;
+      color: #98a2b3;
+      font-size: 11px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
     footer {
       margin-top: 52px;
       padding-top: 22px;
@@ -271,6 +320,9 @@
       .research-top { display: block; }
       .research-date { display: block; margin-top: 4px; }
       .pub { grid-template-columns: 1fr; gap: 7px; }
+      .pub-main { grid-template-columns: 1fr; }
+      .pub-figure { width: 100%; max-width: 320px; }
+      .pub-figure img { width: 100%; height: auto; max-height: 220px; }
       .pub-status { width: fit-content; }
       .award-row { grid-template-columns: 1fr; gap: 2px; }
       .award-row span:last-child { text-align: left; }
@@ -281,7 +333,7 @@
   <div class="page">
     <aside class="sidebar">
       <div class="profile-top">
-        <div class="avatar" aria-label="Jiaxing Li initials">JL</div>
+        <img class="avatar" src="images/JiaxingLi.jpg" alt="Portrait of Jiaxing Li">
         <div>
           <h1 class="name">Jiaxing Li</h1>
           <div class="role">Postgraduate Associate</div>
@@ -457,6 +509,10 @@
           <strong>35th Annual Computational Neuroscience Meeting (CNS 2026)</strong><br>
           Poster Presentation · Halifax, Nova Scotia, Canada · July 2026<br>
           <span class="small">“Event-based machine-learned reduction of biophysically detailed neuron models”</span>
+          <figure class="conference-figure">
+            <img src="images/CNS_Jiaxing.jpg" alt="Jiaxing Li presenting at CNS 2026">
+            <figcaption>Poster presentation at CNS 2026 in Halifax, Nova Scotia.</figcaption>
+          </figure>
         </div>
         <div class="conference">
           <strong>Society for Neuroscience (SfN 2026)</strong><br>
@@ -488,10 +544,16 @@
 
         <div class="pub">
           <div class="pub-status">Published</div>
-          <div>
-            <div class="pub-title">Temperature Rise Mechanism of Pacemaker Induced by a Time-varying Gradient Magnetic Field</div>
-            <div class="authors">Y. Li†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang, X. Liu</div>
-            <div class="venue">IEEE Transactions on Instrumentation and Measurement · <a href="https://doi.org/10.1109/TIM.2024.3485457" target="_blank" rel="noopener">DOI: 10.1109/TIM.2024.3485457</a> · † equal contribution</div>
+          <div class="pub-main">
+            <div>
+              <div class="pub-title">Temperature Rise Mechanism of Pacemaker Induced by a Time-varying Gradient Magnetic Field</div>
+              <div class="authors">Y. Li†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang, X. Liu</div>
+              <div class="venue">IEEE Transactions on Instrumentation and Measurement · <a href="https://doi.org/10.1109/TIM.2024.3485457" target="_blank" rel="noopener">DOI: 10.1109/TIM.2024.3485457</a> · † equal contribution</div>
+            </div>
+            <figure class="pub-figure">
+              <img src="images/Pacemaker_heating_Fig1.jpg" alt="Pacemaker gradient-field heating mechanism" onerror="this.closest('.pub-figure').style.display='none'">
+              <figcaption>Fig. 1 · Pacemaker heating under a gradient magnetic field</figcaption>
+            </figure>
           </div>
         </div>
 
@@ -506,10 +568,16 @@
 
         <div class="pub">
           <div class="pub-status">Published</div>
-          <div>
-            <div class="pub-title">Lumped Parameter Model of Human Whole Body Circulatory Loop</div>
-            <div class="authors">X. Liu†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang</div>
-            <div class="venue">IEEE Access · <a href="https://doi.org/10.1109/ACCESS.2024.3491112" target="_blank" rel="noopener">DOI: 10.1109/ACCESS.2024.3491112</a> · † equal contribution</div>
+          <div class="pub-main">
+            <div>
+              <div class="pub-title">Lumped Parameter Model of Human Whole Body Circulatory Loop</div>
+              <div class="authors">X. Liu†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang</div>
+              <div class="venue">IEEE Access · <a href="https://doi.org/10.1109/ACCESS.2024.3491112" target="_blank" rel="noopener">DOI: 10.1109/ACCESS.2024.3491112</a> · † equal contribution</div>
+            </div>
+            <figure class="pub-figure">
+              <img src="images/Circulatory_loop_Fig2.jpg" alt="Lumped parameter model of the human whole-body circulatory loop" onerror="this.closest('.pub-figure').style.display='none'">
+              <figcaption>Fig. 2 · Whole-body circulatory-loop lumped parameter model</figcaption>
+            </figure>
           </div>
         </div>
 
