@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Jiaxing Li — a living room at night. Pick up the remote and flick through the channels.">
+<title>Jiaxing Li</title>
+<!-- Expected images: images/JiaxingLi.jpg, CNS_Jiaxing.jpg, Event-based_neural_dynamic.jpg, MMSE_MoCA_fig1.png, Pacemaker_heating_Fig1.jpg, Circulatory_loop_Fig2.jpg, Yale_logo.png, Harvard_logo.png, SJTU_logo.png, SIMDT_logo.png -->
+<style>
+:root{--bg:#0d0f14;--panel:#151922;--line:#262c39;--text:#d9dde6;--mute:#8a93a5;--lamp:#e9b96e;--tv:#8fc4e6;--max:820px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;-webkit-font-smoothing:antialiased}
+a{color:var(--tv);text-decoration:none}a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:3px}
+img{max-width:100%}
+.ui{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+
+/* ---------- living room ---------- */
+#room{position:fixed;inset:0;z-index:10;background:radial-gradient(ellipse at 50% 40%,#161c28 0,#0b0d12 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;transition:opacity .5s;overflow:auto}
+#room.off{opacity:0;pointer-events:none}
+#room h1{margin:0;font-weight:500;font-size:clamp(24px,4.5vw,34px);letter-spacing:.01em}
+.scene{position:relative;width:min(860px,96vw);aspect-ratio:8/5;container-type:inline-size;border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px #1c212c,0 30px 80px rgba(0,0,0,.6)}
+.scene svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scene .lit{opacity:0;transition:opacity .9s .35s}
+.scene.on .lit{opacity:1}
+.scene.on #screenOn{animation:pow .7s .15s both}
+@keyframes pow{0%{transform:scaleY(.01);filter:brightness(4)}45%{transform:scaleY(.02) scaleX(1);filter:brightness(3)}100%{transform:scaleY(1);filter:brightness(1)}}
+#screenOn,#screenDark{transform-box:fill-box;transform-origin:center}
+#led{animation:blink 2.6s steps(1) infinite}
+.scene.on #led{animation:none;fill:#4fd18b}
+@keyframes blink{0%{opacity:1}60%{opacity:.15}}
+#remote{cursor:pointer;transform-box:fill-box;transform-origin:center;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+#remote.lift{transform:translate(70px,-95px) rotate(-28deg) scale(2.3)}
+#remote:not(.lift) .glow{animation:rglow 3.2s ease-in-out infinite}
+@keyframes rglow{0%,100%{opacity:.15}50%{opacity:.7}}
+#remote.lift .glow{opacity:0;transition:opacity .3s}
+#remote:focus-visible{outline:none}
+#remote:focus-visible .glow{opacity:1;animation:none}
+.menu{position:absolute;left:26.25%;top:14%;width:47.5%;height:40%;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s 1s}
+.scene.on .menu{opacity:1;pointer-events:auto}
+.menu ol{list-style:none;margin:0;padding:0;display:grid;gap:.3cqw;width:62%}
+.menu button{all:unset;cursor:pointer;display:flex;gap:2cqw;width:100%;padding:.55cqw 1.6cqw;border-radius:4px;color:var(--tv);font:max(11px,1.85cqw)/1.35 ui-monospace,Menlo,Consolas,monospace}
+.menu button:hover,.menu button:focus-visible{background:rgba(143,196,230,.18);color:#fff}
+.menu b{color:var(--lamp);font-weight:400}
+.menu::after,.scene::after{content:"";position:absolute;inset:0;pointer-events:none}
+.menu::after{background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px)}
+#hint{margin:0;font-size:14px;color:var(--mute);min-height:1.6em;text-align:center}
+.skip{font-size:14px}
+
+/* ---------- site ---------- */
+#site{display:none}
+body.in #site{display:block}
+header.bar{position:sticky;top:0;z-index:5;background:rgba(13,15,20,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:var(--max);margin:0 auto;padding:12px 24px;display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}
+.brand{font-weight:600;color:var(--text);margin-right:auto}
+.bar nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+.bar nav a{color:var(--mute);padding-bottom:2px}
+.bar nav a.on{color:var(--lamp);border-bottom:1px solid var(--lamp)}
+.bar nav a:hover{text-decoration:none;color:var(--text)}
+.ch{max-width:var(--max);margin:0 auto;padding:10px 24px 0;color:var(--mute);font-size:12.5px}
+main{max-width:var(--max);margin:0 auto;padding:18px 24px 72px}
+.channel{display:none}.channel.on{display:block}
+h1.page{font-size:36px;font-weight:500;margin:6px 0 4px;line-height:1.2}
+.tag{color:var(--lamp);margin:0 0 22px}
+h2{font-size:22px;font-weight:500;margin:38px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.social{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;margin:0 0 20px}
+.hero{display:grid;grid-template-columns:160px 1fr;gap:26px;align-items:start}
+.hero img{width:160px;height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:var(--panel)}
+.hero p:first-child{margin-top:0}
+table{border-collapse:collapse;width:100%;font-size:15px}
+td{padding:10px 14px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td:first-child{white-space:nowrap;color:var(--mute);width:110px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin:0 0 18px}
+.card h3{margin:0;font-size:17px;font-weight:600;display:flex;gap:12px;align-items:center}
+.card h3 img,.row img.lg{width:34px;height:34px;object-fit:contain;background:#fff;border-radius:6px;padding:3px;flex:none}
+.meta{color:var(--mute);font-size:14px;margin:4px 0 2px}
+.proj{color:var(--lamp);margin:10px 0 2px}
+.card ul{margin:6px 0 0 20px;padding:0}.card li{margin:4px 0}
+.row{display:grid;grid-template-columns:130px 1fr;gap:16px;margin:0 0 18px}
+.row .d{color:var(--mute);font-size:13px;padding-top:3px}
+.row h3{margin:0;font-size:16.5px}
+.row .who{display:flex;gap:12px;align-items:center}
+.pub{display:grid;grid-template-columns:76px 1fr 150px;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.pub:last-of-type{border-bottom:0}
+.st{font-size:11.5px;color:var(--lamp);border:1px solid var(--line);border-radius:4px;padding:3px 6px;height:fit-content;text-align:center}
+.pt{font-weight:600;margin-bottom:3px}.au{font-size:14.5px;color:#aab1c0}.me{color:var(--text);font-weight:700}
+.vn{font-size:13.5px;color:var(--mute)}
+.pub figure{margin:0}.pub figure img{width:150px;height:100px;object-fit:contain;background:#fff;border-radius:6px;padding:4px}
+.pub figcaption{font-size:11px;color:var(--mute);text-align:center;margin-top:4px;line-height:1.3}
+.conf{border-left:3px solid var(--lamp);padding:4px 0 4px 16px;margin:0 0 20px}
+.conf img{width:100%;max-height:340px;object-fit:cover;border-radius:7px;margin-top:10px;border:1px solid var(--line)}
+.conf small{color:var(--mute)}
+.note{margin-top:18px;padding:12px 15px;border:1px dashed var(--line);border-radius:6px;color:var(--mute);font-size:14px}
+.skill{display:grid;grid-template-columns:150px 1fr;gap:14px;margin:0 0 10px}
+.skill b{color:var(--mute);font-weight:500}
+footer{max-width:var(--max);margin:0 auto;padding:22px 24px 40px;border-top:1px solid var(--line);color:var(--mute);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(max-width:720px){
+#hint{font-size:13px}
+.hero{grid-template-columns:1fr}.row{grid-template-columns:1fr;gap:2px}
+.pub{grid-template-columns:1fr}.pub figure img{width:100%;max-width:300px;height:auto}
+.skill{grid-template-columns:1fr;gap:0}h1.page{font-size:30px}
+}
+@media(prefers-reduced-motion:reduce){#room{transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<!-- ============ LIVING ROOM ============ -->
+<div id="room">
+  <h1>Jiaxing Li</h1>
+  <div class="scene" id="scene">
+    <svg viewBox="0 0 800 500" role="img" aria-label="A dim living room at night: a couch, a rug and a coffee table with a remote control, facing a switched-off TV. A window shows the moon.">
+      <defs>
+        <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1712"/><stop offset="1" stop-color="#0d0b09"/></linearGradient>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1630"/><stop offset="1" stop-color="#18284a"/></linearGradient>
+        <radialGradient id="lampglow"><stop offset="0" stop-color="#e9b96e" stop-opacity=".55"/><stop offset="1" stop-color="#e9b96e" stop-opacity="0"/></radialGradient>
+        <radialGradient id="moonglow"><stop offset="0" stop-color="#cfd8ee" stop-opacity=".45"/><stop offset="1" stop-color="#cfd8ee" stop-opacity="0"/></radialGradient>
+        <radialGradient id="spill" cx=".5" cy=".45" r=".5"><stop offset="0" stop-color="#8fc4e6" stop-opacity=".38"/><stop offset="1" stop-color="#8fc4e6" stop-opacity="0"/></radialGradient>
+        <linearGradient id="scr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10222f"/><stop offset="1" stop-color="#091019"/></linearGradient>
+      </defs>
+      <!-- walls & floor -->
+      <rect width="800" height="332" fill="#121722"/>
+      <rect y="332" width="800" height="168" fill="url(#floor)"/>
+      <rect y="326" width="800" height="7" fill="#0a0c11"/>
+      <!-- window -->
+      <rect x="36" y="56" width="132" height="180" fill="#080b12"/>
+      <rect x="42" y="62" width="120" height="168" fill="url(#sky)"/>
+      <circle cx="118" cy="112" r="46" fill="url(#moonglow)"/>
+      <circle cx="118" cy="112" r="14" fill="#e8e4d2"/>
+      <circle cx="108" cy="108" r="3" fill="#cfcab4"/>
+      <g fill="#dfe6f7"><circle cx="64" cy="90" r="1.3"/><circle cx="84" cy="150" r="1"/><circle cx="144" cy="82" r="1.2"/><circle cx="70" cy="196" r="1"/><circle cx="148" cy="170" r="1.3"/><circle cx="96" cy="76" r="1"/></g>
+      <path d="M42 214 L62 196 L74 206 L96 184 L120 204 L140 192 L162 210 V230 H42Z" fill="#0a1020"/>
+      <path d="M102 62V230M42 146H162" stroke="#080b12" stroke-width="4"/>
+      <rect x="24" y="48" width="30" height="200" rx="4" fill="#2b2030"/><rect x="150" y="48" width="30" height="200" rx="4" fill="#2b2030"/>
+      <rect x="20" y="44" width="164" height="6" rx="3" fill="#1a141d"/>
+      <!-- plant under window -->
+      <rect x="62" y="288" width="40" height="42" rx="4" fill="#3a2a22"/>
+      <g fill="#20372e"><path d="M82 290C60 262 58 240 70 226 82 244 86 266 82 290Z"/><path d="M82 290C94 258 112 246 126 250 118 270 100 284 82 290Z"/><path d="M82 290C70 270 48 266 38 272 50 284 66 292 82 290Z"/></g>
+      <!-- frames & shelf (right) -->
+      <rect x="640" y="64" width="54" height="68" fill="#0b0e14" stroke="#2a2f3c" stroke-width="3"/><path d="M646 124 L660 100 L672 112 L682 96 L690 124Z" fill="#1c2a3a"/><circle cx="676" cy="82" r="5" fill="#2b3a52"/>
+      <rect x="704" y="84" width="38" height="46" fill="#0b0e14" stroke="#2a2f3c" stroke-width="3"/><circle cx="723" cy="107" r="9" fill="none" stroke="#3a4560" stroke-width="2"/>
+      <rect x="626" y="176" width="140" height="5" fill="#2a2019"/>
+      <g><rect x="632" y="148" width="9" height="28" fill="#4a3a52"/><rect x="642" y="152" width="8" height="24" fill="#3a4a44"/><rect x="651" y="146" width="10" height="30" fill="#5a4630"/><rect x="664" y="156" width="26" height="20" rx="3" fill="#3a2a22"/><path d="M677 156C670 144 672 136 678 130 684 138 684 148 677 156Z" fill="#20372e"/></g>
+      <!-- floor lamp -->
+      <circle cx="728" cy="200" r="150" fill="url(#lampglow)"/>
+      <rect x="727" y="192" width="3" height="140" fill="#2a2019"/>
+      <ellipse cx="728" cy="333" rx="18" ry="4" fill="#1a140f"/>
+      <path d="M704 166H752L744 196H712Z" fill="#e9b96e" opacity=".92"/>
+      <ellipse cx="728" cy="196" rx="16" ry="3" fill="#fff3d6" opacity=".7"/>
+      <!-- tv spill (on) -->
+      <ellipse class="lit" cx="400" cy="200" rx="360" ry="230" fill="url(#spill)"/>
+      <!-- tv console -->
+      <rect x="180" y="284" width="440" height="44" rx="4" fill="#211810"/><rect x="180" y="284" width="440" height="4" fill="#2d2118"/>
+      <rect x="196" y="328" width="8" height="12" fill="#150f0a"/><rect x="596" y="328" width="8" height="12" fill="#150f0a"/>
+      <rect x="200" y="298" width="150" height="3" fill="#150f0a"/><rect x="450" y="298" width="150" height="3" fill="#150f0a"/>
+      <!-- tv -->
+      <rect x="204" y="62" width="392" height="216" rx="7" fill="#1a1e27"/>
+      <rect x="210" y="68" width="380" height="204" fill="#04060a" id="screenDark"/>
+      <rect class="lit" id="screenOn" x="210" y="68" width="380" height="204" fill="url(#scr)"/>
+      <path d="M210 68H400L330 272H210Z" fill="#fff" opacity=".025"/>
+      <rect x="360" y="278" width="80" height="6" fill="#12151c"/>
+      <circle id="led" cx="578" cy="266" r="2.2" fill="#d94b3d"/>
+      <!-- tv console items -->
+      <rect x="214" y="262" width="26" height="22" rx="3" fill="#3a2a22"/><g fill="#20372e"><path d="M227 264C216 250 216 240 222 232 230 242 232 254 227 264Z"/><path d="M227 264C236 250 246 246 252 250 246 258 238 264 227 264Z"/></g>
+      <!-- rug -->
+      <ellipse cx="400" cy="436" rx="290" ry="52" fill="#1b2232"/><ellipse cx="400" cy="436" rx="262" ry="42" fill="none" stroke="#2a3348" stroke-width="2"/><ellipse cx="400" cy="436" rx="236" ry="34" fill="none" stroke="#e9b96e" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="3 5"/>
+      <!-- coffee table -->
+      <rect x="296" y="394" width="208" height="14" rx="3" fill="#2d2118"/><rect x="296" y="394" width="208" height="3" fill="#3b2c20"/>
+      <rect x="306" y="408" width="7" height="34" fill="#1e150e"/><rect x="487" y="408" width="7" height="34" fill="#1e150e"/>
+      <!-- mug + steam -->
+      <rect x="324" y="374" width="17" height="20" rx="3" fill="#475068"/><path d="M341 379 q8 1 8 7 q0 6 -8 6" fill="none" stroke="#475068" stroke-width="3"/>
+      <path d="M329 370c-3-5 3-8 0-13M336 370c-3-5 3-8 0-13" fill="none" stroke="#9aa6c0" stroke-opacity=".35" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- books -->
+      <rect x="452" y="384" width="42" height="10" rx="1.5" fill="#5a4630"/><rect x="456" y="376" width="36" height="9" rx="1.5" fill="#3a4a44"/>
+      <!-- remote -->
+      <g id="remote" data-remote tabindex="0" role="button" aria-label="Pick up the remote control">
+        <ellipse class="glow" cx="402" cy="388" rx="34" ry="12" fill="#e9b96e" opacity=".2"/>
+        <rect x="386" y="383" width="36" height="10" rx="3" fill="#0b0d12" stroke="#303749" stroke-width="1"/>
+        <circle cx="415" cy="388" r="2" fill="#d94b3d"/><circle cx="406" cy="388" r="1.6" fill="#e9b96e"/><circle cx="399" cy="388" r="1.6" fill="#8fc4e6"/><circle cx="392" cy="388" r="1.6" fill="#8a93a5"/>
+      </g>
+      <!-- couch -->
+      <rect x="130" y="446" width="540" height="62" rx="26" fill="#1a1f2c"/>
+      <rect x="150" y="464" width="500" height="40" rx="14" fill="#20263a"/>
+      <g transform="rotate(-6 214 470)"><rect x="178" y="436" width="74" height="54" rx="12" fill="#3a2f45"/><path d="M190 446h50M190 456h50" stroke="#4a3d58" stroke-width="2"/></g>
+      <rect x="560" y="440" width="76" height="52" rx="12" fill="#2c3a4a" transform="rotate(5 598 466)"/>
+      <path d="M340 480 q60 -26 120 0 v26 h-120Z" fill="#6a3f36" opacity=".75"/>
+      <!-- cat -->
+      <g fill="#0b0d12"><ellipse cx="520" cy="486" rx="30" ry="12"/><circle cx="548" cy="478" r="10"/><path d="M541 472 l2-10 6 6Z M549 470 l6-8 3 10Z"/><path d="M490 488 q-18 2 -16 -10" stroke="#0b0d12" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+    </svg>
+    <div class="menu" id="menu" inert>
+      <ol>
+        <li><button data-go="about"><b>1</b>about</button></li>
+        <li><button data-go="research"><b>2</b>research</button></li>
+        <li><button data-go="publications"><b>3</b>publications</button></li>
+        <li><button data-go="cv"><b>4</b>cv</button></li>
+      </ol>
+    </div>
+  </div>
+  <p id="hint" class="ui" aria-live="polite">pick up the remote on the coffee table</p>
+  <a class="skip ui" href="#about" data-go="about">skip to site →</a>
+</div>
+
+<!-- ============ SITE ============ -->
+<div id="site">
+<header class="bar"><div class="bar-in ui">
+  <a class="brand" href="#about" data-go="about">Jiaxing Li</a>
+  <nav aria-label="Channels">
+    <a href="#about" data-go="about">about</a>
+    <a href="#research" data-go="research">research</a>
+    <a href="#publications" data-go="publications">publications</a>
+    <a href="#cv" data-go="cv">cv</a>
+    <a href="#room" id="home" title="Back to the TV menu (Esc)">⌂ room</a>
+  </nav>
+</div></header>
+<div class="ch ui" id="chlabel">CH 01 · about</div>
+
+<main>
+
+<!-- CH 01 · about -->
+<section class="channel" id="ch-about">
+  <div class="social ui">
+    <a href="mailto:jiaxing.li@yale.edu">jiaxing.li@yale.edu</a>
+    <a href="mailto:jxlijasonlee@gmail.com">jxlijasonlee@gmail.com</a>
+    <a href="CV_jiaxingLi.pdf" target="_blank" rel="noopener">CV (pdf)</a>
+  </div>
+  <h1 class="page">Jiaxing Li</h1>
+  <p class="tag ui">Computational neuroscience ⎟ Neural dynamics ⎟ NeuroAI ⎟ Machine learning</p>
+  <div class="hero">
+    <img src="images/JiaxingLi.jpg" alt="Portrait of Jiaxing Li" onerror="this.style.visibility='hidden'">
+    <div>
+      <p>I am a postgraduate associate at <strong>Yale University</strong> working at the intersection of computational neuroscience, neural dynamics, and machine learning. My current work focuses on event-driven machine-learning reductions of biophysically detailed neuron models in the <strong>NEURON</strong> simulator, with the goal of making multiscale neural simulation faster while preserving biologically meaningful dynamics.</p>
+      <p>Previously, I worked on brain-wide neuronal activity mapping at Yale's Laboratory of Physiology of Behavior and studied longitudinal cognitive-assessment biomarkers in Prof. Maurice Smith's Neuromotor Control Lab at <strong>Harvard University</strong>. My undergraduate training in biomedical engineering at Shanghai Jiao Tong University also included EEG hyperscanning, medical imaging, MRI safety, and physiological modeling.</p>
+    </div>
+  </div>
+  <h2>News</h2>
+  <table>
+    <tr><td>Nov 2026</td><td>🧠 Presenting a poster at the Society for Neuroscience (SfN 2026) in Washington, DC.</td></tr>
+    <tr><td>Jul 2026</td><td>🎤 Presented a poster at CNS 2026 in Halifax, Nova Scotia: “Event-based machine-learned reduction of biophysically detailed neuron models”.</td></tr>
+    <tr><td>Mar 2026</td><td>✈️ Started as a Postgraduate Associate in Prof. Robert McDougal's lab at Yale.</td></tr>
+    <tr><td>Oct 2025</td><td>🔬 Joined Prof. Marcelo Dietrich's Laboratory of Physiology of Behavior at Yale.</td></tr>
+  </table>
+  <h2>Contact</h2>
+  <p>Get in touch about collaborations, opportunities, or just to talk science.</p>
+  <p class="ui" style="font-size:14px"><a href="mailto:jiaxing.li@yale.edu">jiaxing.li@yale.edu</a><br>Yale University · New Haven, Connecticut, US</p>
+</section>
+
+<!-- CH 02 · research -->
+<section class="channel" id="ch-research">
+  <h1 class="page">Research</h1>
+  <p class="tag ui">Projects, in reverse chronological order</p>
+  <article class="card">
+    <h3><img src="images/Yale_logo.png" alt="" onerror="this.style.display='none'">McDougal Lab, Yale University</h3>
+    <div class="meta ui">03/2026 — 09/2027 · Postgraduate Associate to Prof. Robert McDougal</div>
+    <div class="proj">Machine learning reduction of biophysical models for multiscale stimulation analysis</div>
+    <ul>
+      <li>Developed an event-driven ML surrogate for biophysical neuron models in NEURON to predict next-spike timing.</li>
+      <li>Built recurrent encoders that map recent excitatory and inhibitory events into compact latent representations of neuronal dynamics.</li>
+      <li>Achieved F1/AUC of 0.98 and 0.07-ms next-spike-time MAE while preserving long-horizon spiking dynamics.</li>
+      <li>Integrated the surrogate with NEURON for scalable simulation across heterogeneous neuron models.</li>
+    </ul>
+  </article>
+  <article class="card">
+    <h3><img src="images/Yale_logo.png" alt="" onerror="this.style.display='none'">Dietrich Laboratory of Physiology of Behavior, Yale University</h3>
+    <div class="meta ui">10/2025 — 03/2026 · Postgraduate Associate to Prof. Marcelo Dietrich</div>
+    <div class="proj">A deep learning pipeline for 3D brain-wide mapping of local neuronal ensembles in LSFM datasets</div>
+    <ul>
+      <li>Developed a deep-learning pipeline for 3D brain-wide neuronal activity mapping from light-sheet fluorescence microscopy data.</li>
+      <li>Analyzed developmental neural activity patterns to study circuit mechanisms of social behavior.</li>
+    </ul>
+  </article>
+  <article class="card">
+    <h3><img src="images/Harvard_logo.png" alt="" onerror="this.style.display='none'">Neuromotor Control Lab, Harvard University</h3>
+    <div class="meta ui">07/2024 — 11/2024 · Visiting Student to Prof. Maurice Smith</div>
+    <div class="proj">Performance of MMSE and MoCA under repeated administrations</div>
+    <ul>
+      <li>Analyzed longitudinal NACC data to assess MMSE/MoCA diagnostic accuracy across 8 annual administrations.</li>
+      <li>Evaluated CN–MCI and CN–dementia classification using ROC-AUC, Youden index, sensitivity/specificity, and bootstrapping analysis.</li>
+      <li>Demonstrated stable diagnostic performance over 8 years, with AUC decline significantly below 1% per year.</li>
+    </ul>
+  </article>
+  <article class="card">
+    <h3><img src="images/SJTU_logo.png" alt="" onerror="this.style.display='none'">Neuroengineering Laboratory, Shanghai Jiao Tong University</h3>
+    <div class="meta ui">05/2024 — 06/2025 · Research Assistant to Prof. Shanbao Tong</div>
+    <div class="proj">Dual-brain synchronization mechanism of joint attention in natural behavior</div>
+    <ul>
+      <li>Utilized EEG hyperscanning with controlled variables to simulate real-life parent–child interaction.</li>
+      <li>Designed network thresholds and used phase-locking values to construct within-frequency dual-brain networks.</li>
+      <li>Demonstrated the prefrontal cortex's key role in joint-attention engagement with enhanced network connectivity.</li>
+    </ul>
+  </article>
+  <article class="card">
+    <h3><img src="images/SJTU_logo.png" alt="" onerror="this.style.display='none'">Neural Information Processing Laboratory, Shanghai Jiao Tong University</h3>
+    <div class="meta ui">05/2023 — 05/2024 · Research Assistant to Prof. Puming Zhang</div>
+    <div class="proj">Temperature rise mechanism of medical devices induced by gradient magnetic fields</div>
+    <ul>
+      <li>Developed an eddy-current and lumped thermal model to characterize MRI gradient-field-induced heating in active implantable medical devices.</li>
+      <li>Evaluated the effects of gel thickness, initial temperature, and magnetic-field waveform on implant temperature rise.</li>
+      <li>Identified stronger heating under sinusoidal than triangular gradient waveforms and localized peak heating near the device battery.</li>
+    </ul>
+    <div class="proj">Lumped Parameter Model of Human Whole-Body Circulatory Loop</div>
+    <ul>
+      <li>Developed a closed-loop lumped-parameter model of systemic and pulmonary circulation using electrical analogs of cardiovascular dynamics.</li>
+      <li>Implemented and solved ODEs in Simulink to reproduce physiological pressure and flow dynamics.</li>
+      <li>Simulated normal, heart-failure, and cardiogenic-shock states and modeled aortic stenosis and mitral regurgitation.</li>
+    </ul>
+  </article>
+  <article class="card">
+    <h3><img src="images/SIMDT_logo.png" alt="" onerror="this.style.display='none'">Shanghai Institute of Medical Device Testing</h3>
+    <div class="meta ui">05/2023 — 05/2024 · Research Assistant to Dr. Xun Liu</div>
+    <div class="proj">Unsupervised Segmentation Algorithms for Human Brain Stroke Lesions</div>
+    <ul>
+      <li>Leveraged f-AnoGAN and GMVAE models to segment stroke lesions from MRI images.</li>
+      <li>Optimized model parameters to achieve an SSIM of 0.816 for normal-tissue reconstruction.</li>
+      <li>Improved segmentation performance over baseline with a 20% enhancement in SSIM.</li>
+    </ul>
+  </article>
+</section>
+
+<!-- CH 03 · publications -->
+<section class="channel" id="ch-publications">
+  <h1 class="page">Publications</h1>
+  <p class="tag ui">† equal contribution</p>
+  <div class="pub">
+    <div class="st ui">in prep.</div>
+    <div><div class="pt">Event-based machine-learned reduction of a biophysically detailed neuron model</div>
+      <div class="au"><span class="me">J. Li</span>, R.A. McDougal</div><div class="vn">Manuscript in preparation</div></div>
+    <figure><img src="images/Event-based_neural_dynamic.jpg" alt="Event-based neural dynamics and machine-learning surrogate model" onerror="this.closest('figure').style.display='none'"><figcaption>Event-driven neural dynamics</figcaption></figure>
+  </div>
+  <div class="pub">
+    <div class="st ui">in prep.</div>
+    <div><div class="pt">The diagnostic accuracy of the MMSE and MoCA is preserved across 8 years of repeated administration</div>
+      <div class="au"><span class="me">J. Li</span>, M.A. Smith</div><div class="vn">Manuscript in preparation</div></div>
+    <figure><img src="images/MMSE_MoCA_fig1.png" alt="Longitudinal MMSE and MoCA diagnostic accuracy analysis" onerror="this.closest('figure').style.display='none'"><figcaption>MMSE / MoCA diagnostic performance</figcaption></figure>
+  </div>
+  <div class="pub">
+    <div class="st ui">published</div>
+    <div><div class="pt">Temperature Rise Mechanism of Pacemaker Induced by a Time-varying Gradient Magnetic Field</div>
+      <div class="au">Y. Li†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang, X. Liu</div>
+      <div class="vn">IEEE Transactions on Instrumentation and Measurement · <a href="https://doi.org/10.1109/TIM.2024.3485457" target="_blank" rel="noopener">DOI: 10.1109/TIM.2024.3485457</a></div></div>
+    <figure><img src="images/Pacemaker_heating_Fig1.jpg" alt="Pacemaker gradient-field heating mechanism" onerror="this.closest('figure').style.display='none'"><figcaption>Fig. 1 · Pacemaker heating</figcaption></figure>
+  </div>
+  <div class="pub">
+    <div class="st ui">review</div>
+    <div><div class="pt">A Quasi-static Methodology for a Fast and Precise Measurement of Medical Implant Magnetic Torque Induced by Static Magnetic Field in MRI</div>
+      <div class="au">Y. Li†, <span class="me">J. Li†</span>, C. Mo†, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang, X. Liu</div>
+      <div class="vn">IEEE Transactions on Instrumentation and Measurement · under review</div></div>
+    <span></span>
+  </div>
+  <div class="pub">
+    <div class="st ui">published</div>
+    <div><div class="pt">Lumped Parameter Model of Human Whole Body Circulatory Loop</div>
+      <div class="au">X. Liu†, C. Mo†, <span class="me">J. Li†</span>, P. Yang, J. Wang, H. Yu, S. Hu, P. Zhang</div>
+      <div class="vn">IEEE Access · <a href="https://doi.org/10.1109/ACCESS.2024.3491112" target="_blank" rel="noopener">DOI: 10.1109/ACCESS.2024.3491112</a></div></div>
+    <figure><img src="images/Circulatory_loop_Fig2.jpg" alt="Lumped parameter model of the human whole-body circulatory loop" onerror="this.closest('figure').style.display='none'"><figcaption>Fig. 2 · Circulatory-loop model</figcaption></figure>
+  </div>
+  <div class="note"><strong>Acknowledged research contribution:</strong> <em>The Prevalence of Misreporting and Misinterpreting Correlation Coefficients in Biomedical Literature</em> — contributed to data collection, investigation, visualization, and manuscript drafting for a systematic review of statistical reporting in biomedical literature.</div>
+</section>
+
+<!-- CH 04 · cv -->
+<section class="channel" id="ch-cv">
+  <h1 class="page">CV</h1>
+  <p class="tag ui"><a href="CV_jiaxingLi.pdf" target="_blank" rel="noopener">Download the full PDF</a></p>
+
+  <h2>Education &amp; positions</h2>
+  <div class="row"><div class="d ui">03/2026 — 09/2027</div><div class="who"><img class="lg" src="images/Yale_logo.png" alt="" onerror="this.style.display='none'"><div><h3>Yale University</h3><div class="meta">Postgraduate Associate, McDougal Lab · New Haven, CT, US</div></div></div></div>
+  <div class="row"><div class="d ui">10/2025 — 03/2026</div><div class="who"><img class="lg" src="images/Yale_logo.png" alt="" onerror="this.style.display='none'"><div><h3>Yale University</h3><div class="meta">Postgraduate Associate, Laboratory of Physiology of Behavior · New Haven, CT, US</div></div></div></div>
+  <div class="row"><div class="d ui">07/2024 — 11/2024</div><div class="who"><img class="lg" src="images/Harvard_logo.png" alt="" onerror="this.style.display='none'"><div><h3>Harvard University</h3><div class="meta">Visiting Student, Neuromotor Control Lab · Cambridge, MA, US</div></div></div></div>
+  <div class="row"><div class="d ui">09/2021 — 06/2025</div><div class="who"><img class="lg" src="images/SJTU_logo.png" alt="" onerror="this.style.display='none'"><div><h3>Shanghai Jiao Tong University</h3><div class="meta">B.S. in Biomedical Engineering · Shanghai, China</div></div></div></div>
+
+  <h2>Conferences</h2>
+  <div class="conf">
+    <strong>35th Annual Computational Neuroscience Meeting (CNS 2026)</strong><br>
+    <small class="ui">Poster · Halifax, Nova Scotia, Canada · July 2026</small><br>
+    “Event-based machine-learned reduction of biophysically detailed neuron models”
+    <img src="images/CNS_Jiaxing.jpg" alt="Jiaxing Li presenting at CNS 2026" onerror="this.style.display='none'">
+  </div>
+  <div class="conf">
+    <strong>Society for Neuroscience (SfN 2026)</strong><br>
+    <small class="ui">Poster · Washington, DC · November 2026</small><br>
+    “Machine learning reduction of biophysical models for multi-scale stimulation analysis”
+  </div>
+
+  <h2>Honors &amp; awards</h2>
+  <table>
+    <tr><td>2024.11</td><td>Undergraduate Overseas Training Scholarship, Shanghai Jiao Tong University (Top 1%)</td></tr>
+    <tr><td>2024.09</td><td>Undergraduate Merit Scholarship, Shanghai Jiao Tong University (2023 Annual)</td></tr>
+    <tr><td>2024.06</td><td>Second Place, Guangdong Province Biomedical Engineering Design Competition</td></tr>
+    <tr><td>2023.09</td><td>Undergraduate Merit Scholarship, Shanghai Jiao Tong University (2022 Annual)</td></tr>
+    <tr><td>2022.09</td><td>Undergraduate Merit Scholarship, Shanghai Jiao Tong University (2021 Annual)</td></tr>
+  </table>
+
+  <h2>Skills</h2>
+  <div class="skill"><b>Software</b><span>MATLAB, Simulink, R, LabVIEW, Multisim</span></div>
+  <div class="skill"><b>Programming</b><span>Python, C++, C, Linux</span></div>
+  <div class="skill"><b>Experimental / imaging</b><span>Perfusion, immunohistochemistry, stereotaxic surgery, confocal microscopy, genotyping, light-sheet fluorescence microscopy, two-photon fluorescence microscopy</span></div>
+  <div class="skill"><b>Languages</b><span>English (IELTS 7.5), Chinese (native)</span></div>
+  <div class="skill"><b>Interests</b><span>NeuroAI, computational neuroscience, neural dynamics, machine learning, neurological disease, cognitive neuroscience</span></div>
+</section>
+
+</main>
+<footer class="ui"><span>© 2026 Jiaxing Li · New Haven, Connecticut · Updated November 2026</span><a href="#room" id="home2">back to the living room</a></footer>
+</div>
+
+<script>
+(function(){
+  var ids=["about","research","publications","cv"],room=document.getElementById("room"),
+      label=document.getElementById("chlabel");
+  function show(id){
+    if(ids.indexOf(id)<0)id="about";
+    document.body.classList.add("in");room.classList.add("off");
+    ids.forEach(function(n,i){
+      document.getElementById("ch-"+n).classList.toggle("on",n===id);
+      var a=document.querySelector('.bar nav a[data-go="'+n+'"]');
+      if(a)a.classList.toggle("on",n===id);
+      if(n===id)label.textContent="CH 0"+(i+1)+" · "+n;
+    });
+    window.scrollTo(0,0);
+  }
+  var scene=document.getElementById("scene"),remote=document.getElementById("remote"),
+      menu=document.getElementById("menu"),hint=document.getElementById("hint"),powered=false;
+  function power(){
+    if(powered)return;powered=true;
+    remote.classList.add("lift");scene.classList.add("on");
+    hint.textContent="pick a channel \u2014 or press 1\u20134";
+    setTimeout(function(){menu.removeAttribute("inert");var b=menu.querySelector("button");if(b&&!document.body.classList.contains("in"))b.focus({preventScroll:true});},1400);
+  }
+  function home(){room.classList.remove("off");document.body.classList.remove("in");
+    if(powered){menu.removeAttribute("inert");}}
+  function route(){
+    var h=location.hash.slice(1);
+    if(h==="room"||h==="")home();else show(h);
+  }
+  document.addEventListener("click",function(e){
+    var t=e.target.closest("[data-go]");
+    if(t){e.preventDefault();history.pushState(null,"","#"+t.dataset.go);show(t.dataset.go);}
+    if(e.target.closest("[data-remote]")){e.preventDefault();power();return;}
+    var h=e.target.closest("#home,#home2");
+    if(h){e.preventDefault();history.pushState(null,"","#room");home();}
+  });
+  document.addEventListener("keydown",function(e){
+    if(e.target.matches("input,textarea"))return;
+    if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-remote]")){e.preventDefault();power();return;}
+    if(e.key==="Escape"){history.pushState(null,"","#room");home();}
+    var n=parseInt(e.key,10);
+    if(n>=1&&n<=ids.length){history.pushState(null,"","#"+ids[n-1]);show(ids[n-1]);}
+  });
+  window.addEventListener("popstate",route);
+  route();
+})();
+</script>
+</body>
+</html>
